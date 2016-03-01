@@ -1,24 +1,24 @@
-;;; cdlatex.el --- Fast input methods for LaTeX environments and math
-;; Copyright (c) 2010, 2011, 2012, 2014 Free Software Foundation, Inc.
+;;; cdlatex.el -- Fast input methods for LaTeX environments and math
+;; Copyright (c) 2010, 2011, 2012 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: tex
-;; Version: 4.7
+;; Version: 4.6
 ;;
-;; This file is not part of GNU Emacs.
+;; This file is part of GNU Emacs.
 ;;
-;; GNUTHis file is free software: you can redistribute it and/or modify
+;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; cdlatex.el  is distributed in the hope that it will be useful,
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with cdlatex.el. If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -717,7 +717,7 @@ Entering cdlatex-mode calls the hook cdlatex-mode-hook.
 
 ;; Alist connection opening with closing delimiters
 (defconst cdlatex-parens-pairs '(("(".")") ("["."]") ("{"."}")
-                               ("|"."|") ("<".">")))
+                               ("|"."|") ("<".">") ("!"."!")))
 
 (defun cdlatex-pbb ()
   "Insert a pair of parens, brackets or braces."
@@ -799,6 +799,7 @@ When not in LaTeX math environment, _{} and ^{} will have dollars."
          (close1 close))
     (if (string= paren "<") (setq paren1 "\\langle" close1 "\\rangle"))
     (if (string= paren "{") (setq paren1 "\\{" close1 "\\}"))
+    (if (string= paren "!") (setq paren1 "\\|" close1 "\\|"))
     (backward-delete-char 1)
     (if (and (stringp cdlatex-paired-parens)
              (string-match (regexp-quote paren) cdlatex-paired-parens)
@@ -1291,18 +1292,7 @@ constant `cdlatex-math-modify-alist'."
         (flock (cdlatex-use-fonts)) this-char value)
     (if sparse
         (setq all-chars (concat (mapcar 'car alist)))
-      (setq all-chars "aA0 bB1!cC2@dD3#eE4$fF5%gG6^hH7&iI8
-jJ9?kK+~lL-_mM*|nN/\\oO=\"pP()qQ[]rR{}sS<>tT`'uU.:vV
-
-wW
-
-xX
-
-yY
-
-zZ
-
-"))
+      (setq all-chars "aA0 bB1!cC2@dD3#eE4$fF5%gG6^hH7&iI8jJ9?kK+~lL-_mM*|nN/\\oO=\"pP()qQ[]rR{}sS<>tT`'uU.:vVwWxXyYzZ"))
     (if (get-buffer-window " *CDLaTeX Help*")
         (select-window (get-buffer-window " *CDLaTeX Help*"))
       (switch-to-buffer-other-window " *CDLaTeX Help*"))
@@ -1438,6 +1428,8 @@ zZ
      "<" cdlatex-lr-pair nil nil t)
     ("lr|"        "Insert a \\left| \\right| pair"
      "|" cdlatex-lr-pair nil nil t)
+    ("lr!"        "Insert a \\left\| \\right\| pair"
+     "!" cdlatex-lr-pair nil nil t)
     ("caseeq"     "Insert a = { construct"
      "\\left\\{ \n\\begin{array}{l@{\\quad:\\quad}l}\n? & \\\\\n & \n\\end{array}\\right." cdlatex-position-cursor nil nil t)
     ("fr"         "Insert \\frac{}{}"
