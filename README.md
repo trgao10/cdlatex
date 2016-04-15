@@ -1,7 +1,4 @@
 cdlatex
 =======
 
-Fast input methods for LaTeX environments and math
-
-This is now the main home for cdlatex.el, the version at
-staff.astro.uva.nl/~dominik will be removed soon.
+Fast input methods for LaTeX environments and math (forked from the main home for cdlatex.el on github). The only change from trgao10 is adding "lr!" for auto-completing parentheses "\left\|\right\|".
